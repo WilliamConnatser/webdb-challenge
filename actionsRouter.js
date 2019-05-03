@@ -4,7 +4,7 @@ const db = require('./api/api');
 const router = express.Router();
 
 router.post('/', (req,res) => {
-    db.addProject(req.body)
+    db.addAction(req.body)
     .then(newAction => {
         res.status(200).send(newAction);
     })

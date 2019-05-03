@@ -14,7 +14,8 @@ router.get('/:id', (req,res) => {
     db.getProject(req.params.id)
     .then(project => {
         res.status(200).send(project);
-    });
+    })
+    .catch(err=>res.status(500).send({message: err}));
 });
 
 module.exports = router;
