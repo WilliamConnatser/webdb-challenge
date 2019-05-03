@@ -29,29 +29,13 @@ const addAction = (action) => {
 }
 
 const getProject = (id) => {
-    return db('projects')
-        .innerJoin('actions', 'actions.project_id', 'projects.id')
-        .select({
-            id: 'projects.id',
-            name: 'projects.name',
-            description: 'projects.description',
-            completed: 'projects.complete',
-            action_description: 'actions.description',
-            action_notes: 'actions.notes',
-            action_complete: 'actions.complete',
-            action_project_id: 'actions.project_id'
-            // actions: [
-            //     db.raw('ARRAY_AGG(actions) as action')
-            // ]
+    let project = db('projects').where({id});
+    let actions = db('actions').where({project_id: id})
 
-        })
-        .where({
-            'projects.id': id
-        })
-        .first()
-        .catch(err => {
-            return err.message;
-        });
+    return Promise.all([project, actions]).then(results => {
+      const [project, actions] = results;
+      return {...project, actions: [...actions]};
+    });
 }
 
 const getAction = (id) => {
